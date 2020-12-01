@@ -9,13 +9,18 @@ Uso:
 
   Vá para o diretório que você deseja que seja o pai deste repositório em sua máquina.
   Digite
-    git clone https://github.com/JorgeJambeiroFilho/ceiamin
+  
+      git clone https://github.com/JorgeJambeiroFilho/ceiamin
+  
   O repositório será clonado em sua máquina
   Digite 
-    cd ceiamin
+  
+      cd ceiamin
   para entrar no repositorio
+  
   Execute o script 
-    run.sh    
+  
+      run.sh    
 
 Você pode acessar a aplicação usando um navegador pelo endereço 127.0.0.1:8080
 
