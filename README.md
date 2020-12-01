@@ -55,6 +55,18 @@ Temos:
   
       O frontend e o backend não devem ser expostos na web, pois não tem todos os recursos de segurança e escalabilidade.
       Em vez disto usamos o servidor nginx como proxy reverso e fazemos com que ele atenda aos usuários e redirecione os pedido para o frontend e o backend.
+      O nginx também pode agir como balanceador de nível 4 (rede), por exemplo dividindo a carga entre várias instância do frontend e do backend.
+      
+      
+  Não temos um container com balanceador nível 7, mas podemos ter    
+      
+      Como o balanceaor de nível 4 divide de solicitações vindas do mesmo usuário entre diferentes instâncias do backend, o backend não pode manter um estado 
+      em memória. Tudo é carregado do bd a cada pedido.
+      Se for preciso manter um estado em memória para ganhar velocidade no tratamento de pequenas solicitações, como ocorre com chatbots, então é
+      preciso ter também um balanceador de nível 7 (aplicação), que lá foi implementado também em Python. O balanceador de nível 7 tem várias instâncias
+      que são acionadas alternadamente pelo balanceador de nível 4. Elas redirecionam os pedidos lendo o conteúdo das mensagens para manda o mesmo usuário sempre
+      para mesma instância do backend.
+      Não colocamos isto no exemplo, mas é bom ter em mente esta possibilidade.
       
   Um container com MongoDB
   
