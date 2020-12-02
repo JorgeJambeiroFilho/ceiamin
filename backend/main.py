@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from enum import Enum
 
+from br.gov.rfb.ceia.ceiamin.backend.minceia import wordInitialLoad
 from br.gov.rfb.ceia.ceiamin.backend.palavras import Palavras
 from fastapi.middleware.cors import CORSMiddleware
-
+import traceback
 
 
 app = FastAPI()
@@ -28,3 +29,12 @@ async def root():
 async def get_model():
     palavras = Palavras()
     return { "palavras": palavras.palavras }
+
+@app.get("/backend/initialload")
+async def get_model():
+    try:
+        await wordInitialLoad()
+        return { "initialload": "ok"}
+    except Exception as e:
+        traceback.print_exc()
+        return {"initialload": "fail"}

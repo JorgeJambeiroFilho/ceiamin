@@ -37,3 +37,23 @@ services:
       - ./www:/etc/www
       #Agora o mapeamento foi de um diretório
 
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 27019:27017 # pode ser que a porta default do mongo esteja ocupada no host
+
+      #quando este contaoner estiver no ar, você pode digitar
+        #docker exec -it mongo bash
+      #para entrar nele (como em qualuqer outro)
+      #Dentro do container, vocẽ pode usar
+        #mongo
+      #Para chegar na shell do mongodb e dar comandos normalmente
+      #Você pode ter que se autenticar no bdadmin
+        #use admin
+        #db.auth("root","root")
+

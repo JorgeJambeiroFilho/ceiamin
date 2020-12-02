@@ -7,7 +7,7 @@ class Palavras:
         fp = open("palavras.txt", mode="r", encoding="utf-8")
         lin = fp.readline()
         while (lin):
-            print(lin)
+            #print(lin)
             if (lin[0]!='#'):
                 lis = lin.split()
                 palavra = [lis[1], lis[3]]

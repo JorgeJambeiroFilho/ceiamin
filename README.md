@@ -26,6 +26,10 @@ Uso:
    
    Execute 
    
+        run.sh
+        
+  O script acima, apenas define uma variável de configuração e chama    
+        
         docker-compose up 
    
    para executar a aplicação completa.
