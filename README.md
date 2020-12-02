@@ -20,9 +20,21 @@ Uso:
   
   Execute o script 
   
-      run.sh    
+      setup.sh    
 
-Você pode acessar a aplicação usando um navegador pelo endereço 127.0.0.1:8080
+   para preparar as imagens docker
+   
+   Execute 
+   
+        docker-compose up 
+   
+   para executar a aplicação completa.
+
+        docker-compose down
+   
+   A execuçao vai para se bater CRTL-C, mas para limpar tudo e poder executar de novo sem problemas digite:
+
+Você pode acessar a aplicação usando um navegador pelo endereço 127.0.0.1/frontend
 
 Neste momento, vários containers docker estarão em execução. Eles estao se comunicando como se fossem máquinas separadas.
 

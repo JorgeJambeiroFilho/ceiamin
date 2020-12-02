@@ -2,6 +2,7 @@
 backend = ""
 // Para rodar sem a intermediação do nginx, descomente esta linha
 //backend = "http://127.0.0.1:8001"
+var backend = document.getElementById("backend_url_prefix").value;
 
 new Vue({
   el: '#app',
