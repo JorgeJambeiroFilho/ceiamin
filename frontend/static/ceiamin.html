@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CEIA Min</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>palavras</h1>
+
+  <section v-if="errored">
+    <p>carga de palavras falhou</p>
+  </section>
+
+  <section v-else>
+    <div v-if="loading">carregando...</div>
+
+    <div
+      v-else
+      v-for="palavra in palavras"
+      class="palavras"
+    >
+      {{ palavra[0] }} = {{ palavra[1] }}
+    </div>
+
+  </section>
+</div>
+
+<script src="/frontend/static/ceiamin.js"></script>
+</body>
+</html>
