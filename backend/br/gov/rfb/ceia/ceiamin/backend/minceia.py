@@ -6,7 +6,7 @@ async def wordInitialLoad():
     mdb = getBotMongoDB()
     palavras = Palavras()
     for palavra in palavras.palavras:
-        pp = {"word":palavra[0]}
-        pi = {"word":palavra[1]}
+        pp = {"word":palavra[1]}
+        pi = {"word":palavra[3]}
         await mdb.words.insert_one(pp)
         await mdb.words.insert_one(pi)
