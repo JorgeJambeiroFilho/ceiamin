@@ -1,0 +1,20 @@
+[development]
+TEST = 1
+OAUTH2_AUTHORIZATION_URL = "https://127.0.0.1/auth/realms/ceiamin/protocol/openid-connect/auth"
+OAUTH2_TOKEN_URL = "https://127.0.0.1/auth/realms/ceiamin/protocol/openid-connect/token"
+OAUTH2_USERINFO_URL = "https://127.0.0.1/auth/realms/playipintern/protocol/openid-connect/userinfo"
+
+[testing]
+TEST = 1
+#use o ip locaql de minha máquina, porque ele é acessível tanto de dentro quanto de fora da rede Docker
+OAUTH2_AUTHORIZATION_URL = "https://192.168.12.43/auth/realms/ceiamin/protocol/openid-connect/auth"
+OAUTH2_TOKEN_URL = "https://192.168.12.43/auth/realms/ceiamin/protocol/openid-connect/token"
+OAUTH2_USERINFO_URL = "https://192.168.12.43/auth/realms/ceiamin/protocol/openid-connect/userinfo"
+
+
+[production]
+TEST = 0
+#para funcionar é preciso obter o nome ceiamin.rfb.gov.br, oficialmente.
+OAUTH2_AUTHORIZATION_URL = "https://ceiamin.rfb.gov.br/auth/realms/ceiamin/protocol/openid-connect/auth"
+OAUTH2_TOKEN_URL = "https://ceiamin.rfb.gov.br/auth/realms/ceiamin/protocol/openid-connect/token"
+OAUTH2_USERINFO_URL = "https://ceiamin.rfb.gov.br/auth/realms/ceiamin/protocol/openid-connect/userinfo"

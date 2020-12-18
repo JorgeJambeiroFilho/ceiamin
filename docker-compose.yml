@@ -10,6 +10,12 @@ services:
     ports:
       - "8001:80"
     restart: unless-stopped  # o serviço fica no ar, mesmo que a máquina host seja reiniciada. só para por comando explícito
+    build:
+        context: ./backend
+        dockerfile: Dockerfile
+    environment:
+      ENV_FOR_DYNACONF: "testing"
+      PYTHONUNBUFFERED: 1  # para os prints aparecerem logo
 
   ceiamin_frontend:
     container_name: c_rfb_ceiamin_frontend
@@ -19,7 +25,12 @@ services:
     ports:
       - "8000:80"
     restart: unless-stopped  # o serviço fica no ar, mesmo que a máquina host seja reiniciada. só para por comando explícito
-
+    build:
+        context: ./frontend
+        dockerfile: Dockerfile
+    environment:
+      ENV_FOR_DYNACONF: "testing"
+      PYTHONUNBUFFERED: 1  # para os prints aparecerem logo
 
   nginx:
     restart: unless-stopped
@@ -36,6 +47,9 @@ services:
       #O nginx está dentro do container e procura por /etc/nginx/conf.d/default.conf
       - ./www:/etc/www
       #Agora o mapeamento foi de um diretório
+      - ./selfsigned.key:/etc/nginx/cert/selfsigned.key # para rodar na maquina de desenvolvimento
+      - ./selfsigned.crt:/etc/nginx/cert/selfsigned.crt
+
 
   mongo:
     image: mongo
@@ -56,4 +70,29 @@ services:
       #Você pode ter que se autenticar no bdadmin
         #use admin
         #db.auth("root","root")
+
+  keycloak:
+    container_name: keycloak
+    hostname: keycloak
+    image: quay.io/keycloak/keycloak:latest
+    ports:
+      - 8002:8080
+    environment:
+        #DB_VENDOR: MYSQL
+        #DB_ADDR: mysql
+        #DB_DATABASE: keycloak
+        #DB_USER: keycloak
+        #DB_PASSWORD: keycloak
+        #JDBC_PARAMS: "connectTimeout=600000" #&characterEncoding=UTF-8
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+        PROXY_ADDRESS_FORWARDING: 'true'  # não lembro para que isso, talvez possa sair
+        #KEYCLOAK_IMPORT: "/tmp/ceiamin-realm.json"
+    volumes:
+      - ./keycloakdata:/opt/jboss/keycloak/standalone/data/
+      - ./keycloak-ceiamin-realm-export.json:/tmp/ceiamin-realm.json
+    restart: unless-stopped
+    #depends_on:
+    #  - mysql
+
 

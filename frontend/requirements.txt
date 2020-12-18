@@ -1,2 +1,5 @@
+aiohttp==3.6.2    # a versão mais nova está falhando quando se tenta colocar um cookie e redireciosnar ao mesmo tempo
 fastapi[all]
 uvicorn
+dynaconf
+pyjwt

@@ -2,3 +2,4 @@ fastapi[all]
 uvicorn
 motor
 dynaconf
+pyjwt

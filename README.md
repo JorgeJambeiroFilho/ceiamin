@@ -26,19 +26,17 @@ Uso:
    
    Execute 
    
-        run.sh
+        docker-compose up
         
-  O script acima, apenas define uma variável de configuração e chama    
-        
-        docker-compose up 
-   
+ 
    para executar a aplicação completa.
 
-        docker-compose down
-   
-   A execuçao vai para se bater CRTL-C, mas para limpar tudo e poder executar de novo sem problemas digite:
 
-Você pode acessar a aplicação usando um navegador pelo endereço 127.0.0.1/frontend
+   A execuçao vai parar se bater CRTL-C, mas para limpar tudo e poder executar de novo sem problemas digite:
+
+        docker-compose down
+
+Você pode acessar a aplicação usando um navegador pelo endereço https://127.0.0.1/frontend, mas antes terá que criar um usuário e um cliente no esquema de Oauth2. Então leia a seção que fale sobre o Keycloack, nete documento. 
 
 Neste momento, vários containers docker estarão em execução. Eles estao se comunicando como se fossem máquinas separadas.
 
@@ -94,7 +92,50 @@ Temos:
       A medida em que os usuários vão interagindo com o frontend, eles vão gerando dados que precisam ser gurdados em algum lugar.
       Assim, já criamos um banco de dados para ser acessado por todos os outros containers.
       
+  Um container com o Keycloak 
+  
+      O keycloak é um servidor de autenticação Oauth2 / OpenID. As aplicações reais da RFB deverão se autenticar usando o servidor
+      da RFB que se chama MosEseley. Ver grupo de interoperabilidade no Teams.
+      Para não depender de algo externo, coloquei um servidor de autentiação livre embutido no CEIAMIN, o Keycloak
       
+      Antes de usar o CEIAMIN, é preciso fazer alguns cadastros KeyCloak. Acesse:
+      
+        https://127.0.0.1/auth
+      
+      e escolha "Administration Console".
+            
+      O usuário é "admin" e a senha também é "admin"
+      
+      Se o navegador disser que não é seguro, é porque o certificado é auto assinado. Clique em avançado e diga que assume o risco. Isto é só um exemplo.
+      
+      No canto superior esquerdo, a uma "combobox" onde está escrito "master". Mova o mouse para cima dela e aparecerá a opção de criar um "Realm".
+      
+      Crie o rearm "ceiamin".
+      
+      Dentro do realm "ceiamin", clique em "clients" (na coluna esquerda). Peça para adicionar um cliente e crie o cliente com
+       
+        name: "ceiamin" 
+        root url: https://127.0.0.1/frontend
+        
+      Achei a aba de setting deste cliente e adicione uma "valid redirect url"
+      
+        https://127.0.0.1/frontend/*
+        
+      Clique em "save" na parete de baixo da página.
+      
+      De novo na coluna esqueda, clique em "users". Adicione um usuário para você. Escolha o nome que quiser e ponha no campo "user name".
+      
+      Clique em save.
+      
+      Acesse o ceiamion via 
+      
+        https://127.0.0.1/frontend      
+      
+      
+      
+        
+  
+        
       
       
       
