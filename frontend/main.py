@@ -56,7 +56,7 @@ def get_oauth2_login_url_intern(request: Request):
       if "X-Forwarded-Ssl" in request.headers and request.headers["X-Forwarded-Ssl"]=='on':
           protocol = "https"
       else:
-          protocol = request.scheme
+          protocol = request.url.scheme
 
       print(request.headers)
 
@@ -103,7 +103,7 @@ async def oauth2_callback(request:Request):
     if "X-Forwarded-Ssl" in request.headers and request.headers["X-Forwarded-Ssl"] == 'on':
         protocol = "https"
     else:
-        protocol = request.scheme
+        protocol = request.url.scheme
     cid = "ceiamin"
 
     callback = protocol+"://" + host + "/frontend/oauth2Callback"
@@ -142,7 +142,10 @@ async def oauth2_callback(request:Request):
 
     sessionId = str(uuid.uuid1())
     encoded_jwt = jwt.encode({'session': sessionId, 'user': jsonUser["preferred_username"], "timeini":str(datetime.now().timestamp()) }, secret, algorithm='HS256')
-    encoded_jwt_str = encoded_jwt.decode("utf-8")
+    if isinstance(encoded_jwt, str):
+        encoded_jwt_str = encoded_jwt
+    else:
+        encoded_jwt_str = encoded_jwt.decode("utf-8")
 
     response = RedirectResponse("/frontend")
     response.set_cookie("ceiaminsession", encoded_jwt_str, path="/")
