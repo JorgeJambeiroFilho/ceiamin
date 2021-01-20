@@ -2,7 +2,6 @@
 import json
 import traceback
 from datetime import datetime
-
 from aiohttp import ClientResponse, ClientSession
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
@@ -17,7 +16,7 @@ import aiohttp
 
 USE_REVPROXY = False
 
-#para rodar sem intermediação do ngix, comente esta linha
+#para rodar sem intermediação do nginx, comente esta linha
 if USE_REVPROXY:
     dir = "/app/"
     backprefix = ""
@@ -52,27 +51,27 @@ async def read_items(request:Request):
 
 
 def get_oauth2_login_url_intern(request: Request):
-      host = request.headers["host"]
-      if "X-Forwarded-Ssl" in request.headers and request.headers["X-Forwarded-Ssl"]=='on':
-          protocol = "https"
-      else:
-          protocol = request.url.scheme
+    host = request.headers["host"]
+    if "X-Forwarded-Ssl" in request.headers and request.headers["X-Forwarded-Ssl"]=='on':
+        protocol = "https"
+    else:
+        protocol = request.url.scheme
 
-      print(request.headers)
+    print(request.headers)
 
-      state = str(uuid.uuid1())
-      nonce = 456
-      cid = "ceiamin"
+    state = str(uuid.uuid1())
+    nonce = 456
+    cid = "ceiamin"
 
-      callback = protocol + "://" + host + "/frontend/oauth2Callback"
+    callback = protocol + "://" + host + "/frontend/oauth2Callback/"
 
-      url = "{burl}?client_id={cid}&response_type=code&state={state}&nonce={nonce}&redirect_uri={callback}"\
-            .format(burl=settings.OAUTH2_AUTHORIZATION_URL, nonce=nonce, state=state, cid=cid, callback=callback)
+    url = "{burl}?client_id={cid}&response_type=code&state={state}&nonce={nonce}&redirect_uri={callback}"\
+          .format(burl=settings.OAUTH2_AUTHORIZATION_URL, nonce=nonce, state=state, cid=cid, callback=callback)
 
-      response = RedirectResponse(url=url)
-      response.set_cookie(key="ceiamin_oauth_state", value=state, path="/")
-      print("state "+state)
-      return response
+    response = RedirectResponse(url=url)
+    response.set_cookie(key="ceiamin_oauth_state", value=state, path="/")
+    print("state "+state)
+    return response
 
 
 async def checkSession(request:Request):
@@ -84,7 +83,7 @@ async def checkSession(request:Request):
     session_bytes = session_str.encode("utf-8")
 
     try:
-        session_data = jwt.decode(session_bytes, secret, algorithm='HS256')
+        session_data = jwt.decode(session_bytes, secret, algorithms='HS256')
         if "timeini" not in session_data:
             return False
         timen = datetime.now().timestamp()
@@ -104,9 +103,10 @@ async def oauth2_callback(request:Request):
         protocol = "https"
     else:
         protocol = request.url.scheme
+
     cid = "ceiamin"
 
-    callback = protocol+"://" + host + "/frontend/oauth2Callback"
+    callback = protocol+"://" + host + "/frontend/oauth2Callback/"
 
     state = request.query_params['state']
     #session_state = request.rel_url.query['session_state']
@@ -134,7 +134,7 @@ async def oauth2_callback(request:Request):
 
     except:
         traceback.print_exc()
-        res = PlainTextResponse("autorizaçao falhou", status_code=403)
+        res = PlainTextResponse("Autorização falhou.", status_code=403)
         return res
     finally:
         if resp:
@@ -151,5 +151,3 @@ async def oauth2_callback(request:Request):
     response.set_cookie("ceiaminsession", encoded_jwt_str, path="/")
 
     return response
-
-
