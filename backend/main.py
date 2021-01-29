@@ -3,6 +3,7 @@ from enum import Enum
 
 from br.gov.rfb.ceia.ceiamin.backend.minceia import wordInitialLoad
 from br.gov.rfb.ceia.ceiamin.backend.palavras import Palavras
+from br.gov.rfb.ceia.ceiamin.backend.novaspalavras import palavrasCarregamentoInicial
 from fastapi.middleware.cors import CORSMiddleware
 import traceback
 
@@ -38,3 +39,12 @@ async def get_model():
     except Exception as e:
         traceback.print_exc()
         return {"initialload": "fail"}
+
+@app.get("/backend/novaspalavras")
+async def get_model():
+    try:
+        vocabulos = await palavrasCarregamentoInicial()
+        return { "Novas palavras": vocabulos }
+    except Exception as e:
+        traceback.print_exc()
+        return {"Novas palavras": "Falhou"}
