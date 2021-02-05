@@ -5,30 +5,102 @@
     <title>CEIA Min</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+      </style>
+
 </head>
 <body>
 <input type="hidden"  id="backend_url_prefix" value="{backprefix}">
-<div id="app">
-  <h1>palavras</h1>
+
+<div id="adicionapalavras">
+
+  <h2>CEIAmin - Classificação de palavras em Inglês e Português</h2>
+
+  <textarea 
+    v-model="novasPalavras" 
+    placeholder="Adicione palavras" 
+    name="palavras_unicas"
+    rows = "16" 
+    cols = "100" 
+    required></textarea>
+  <br>
+  <span v-if="palavrasUnicas">Quantidade de palavras a adicionar: {{ palavrasUnicas.length }}</span>
+  <p>{{ palavrasUnicas }}</p>
+  <p></p>
+  <input 
+    type="checkbox"
+    v-model="votoPortugues" 
+    name="voto_portugues" 
+    true-value=1
+    false-value=0
+    >
+  <label for="portugues">Português</label>
+  <input 
+    type="checkbox" 
+    v-model="votoIngles" 
+    name="voto_ingles"
+    true-value=1
+    false-value=0
+    >
+  <label for="ingles">Inglês</label>
+  <br></br>
+  
+  <input type="submit" value="Enviar" onclick="addpalavra.inserirpalavras()">
+  
+
 
   <section v-if="errored">
-    <p>carga de palavras falhou</p>
+    <p>Carga de palavras falhou.</p>
   </section>
-
   <section v-else>
-    <div v-if="loading">carregando...</div>
-
-    <div
-      v-else
-      v-for="palavra in palavras"
-      class="palavras"
-    >
-      {{ palavra[0] }} = {{ palavra[1] }}
+    <div v-if="loading">Carregando...</div>
+    <div v-else>
+      <h2>Palavras já inseridas: {{ palavras.length }}</h2>
+      <table>
+          <tr>
+            <th> Palavra </th>
+            <th> Inglês </th>
+            <th> Português </th>
+            <!-- <th> Apagar </th> --> 
+            <!-- Ainda vou implementar o botão de apagar palavra -->
+          </tr>
+          <tr v-for="palavra in palavras">
+              <td> {{ palavra[0] }} </td>
+              <td> {{ palavra[1] }} </td>
+              <td> {{ palavra[2] }} </td>
+              <!-- <td> 
+                <input 
+                  type="submit" 
+                  value="Apagar" 
+                  v-on:click="apagarpalavra(palavra[0])"
+                >
+              </td> -->
+            </tr>
+      </table>
     </div>
+  </section> 
 
-  </section>
+</form>
+
 </div>
 
 <script src="/frontend/static/ceiamin.js"></script>
+
 </body>
 </html>
