@@ -1,106 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CEIA Min</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8">
+  <title>CEIA Min</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    <style>
-      table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-      }
-      
-      td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-      }
-      
-      tr:nth-child(even) {
-        background-color: #dddddd;
-      }
-      </style>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
 
+    /* Style the tab */
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+
+    /* Style the buttons that are used to open the tab content */
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+    .tab button.active {
+      background-color: #ccc;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+
+  </style>
+
+  <script>
+    function openCity(evt, cityName) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
 </head>
+
+
 <body>
+
 <input type="hidden"  id="backend_url_prefix" value="{backprefix}">
-
+      
 <div id="adicionapalavras">
-
-  <h2>CEIAmin - Classificação de palavras em Inglês e Português</h2>
-
-  <textarea 
-    v-model="novasPalavras" 
-    placeholder="Adicione palavras" 
-    name="palavras_unicas"
-    rows = "16" 
-    cols = "100" 
-    required></textarea>
-  <br>
-  <span v-if="palavrasUnicas">Quantidade de palavras a adicionar: {{ palavrasUnicas.length }}</span>
-  <p>{{ palavrasUnicas }}</p>
-  <p></p>
-  <input 
-    type="checkbox"
-    v-model="votoPortugues" 
-    name="voto_portugues" 
-    true-value=1
-    false-value=0
-    >
-  <label for="portugues">Português</label>
-  <input 
-    type="checkbox" 
-    v-model="votoIngles" 
-    name="voto_ingles"
-    true-value=1
-    false-value=0
-    >
-  <label for="ingles">Inglês</label>
-  <br></br>
   
-  <input type="submit" value="Enviar" onclick="addpalavra.inserirpalavras()">
+  <h1>CEIAmin - Classificação de palavras em Inglês e Português</h1>
+    
   
-
-
-  <section v-if="errored">
-    <p>Carga de palavras falhou.</p>
-  </section>
-  <section v-else>
-    <div v-if="loading">Carregando...</div>
-    <div v-else>
-      <h2>Palavras já inseridas: {{ palavras.length }}</h2>
-      <table>
-          <tr>
-            <th> Palavra </th>
-            <th> Inglês </th>
-            <th> Português </th>
-            <!-- <th> Apagar </th> --> 
-            <!-- Ainda vou implementar o botão de apagar palavra -->
-          </tr>
-          <tr v-for="palavra in palavras">
-              <td> {{ palavra[0] }} </td>
-              <td> {{ palavra[1] }} </td>
-              <td> {{ palavra[2] }} </td>
-              <!-- <td> 
-                <input 
-                  type="submit" 
-                  value="Apagar" 
-                  v-on:click="apagarpalavra(palavra[0])"
-                >
-              </td> -->
-            </tr>
-      </table>
+    <div class="tab">
+      <button class="tablinks" onclick="openCity(event, 'Classificar')" id="defaultOpen">Classificar palavras</button>
+      <button class="tablinks" onclick="openCity(event, 'Inserir')">Inserir novas palavras</button>
     </div>
-  </section> 
 
-</form>
 
+    <!-- Tab content -->
+    <div id="Classificar" class="tabcontent">
+      <h2>Classificação de Palavras</h2>
+        <h3>Palavras a classificar: {{ palavrasaVotar.length }}</h3>    
+        <p>As palavras estão em ordem decrescente de conhecimento por parte da IA. Indique a quais idiomas as palavras pertencem e clique em Enviar.</p>
+        <table>
+            <tr>
+              <th> Palavra</th>
+              <th> Percentual de conhecimento</th>
+              <th> Quantidade de votos</th>
+              <th> A qual idioma essa palavra pertence</th>
+            </tr>
+            <tr v-for="palavraaVotar in palavrasaVotar">
+                <td> {{ palavraaVotar.vocabulo }} </td>
+                <td> {{ palavraaVotar.conhecimento }} </td>
+                <td> {{ palavraaVotar.votos }} </td>
+                <td> 
+                  <input 
+                  type="checkbox"
+                  value="votarIngles" 
+                  true-value=1
+                  false-value=0>
+                  Inglês 
+                  <input 
+                  type="checkbox"
+                  value="votarPortugues"
+                  true-value=1
+                  false-value=0>
+                  Português 
+                </td>
+            </tr>
+        </table>
+        <br></br>
+        <!-- <input type="submit" value="Enviar" onclick="addpalavra.votarpalavras(palavrasaVotar)"> -->
+        <input type="submit" value="Enviar">
+      </div>
+    </div>
+
+
+    <!-- Tab content -->
+    <div id="Inserir" class="tabcontent">
+      <h2>Inserção de Novas Palavras</h2>
+      <textarea 
+        v-model="novasPalavras" 
+        placeholder="Adicione palavras" 
+        name="palavras_unicas"
+        rows = "16" 
+        cols = "100" 
+        required></textarea>
+      <br>
+      <span v-if="palavrasUnicas">Quantidade de palavras a adicionar: {{ palavrasUnicas.length }}</span>
+      <p>{{ palavrasUnicas }}</p>
+      <p></p>
+      <input 
+        type="checkbox"
+        v-model="votoPortugues" 
+        name="voto_portugues" 
+        true-value=1
+        false-value=0
+        >
+      <label for="portugues">Português</label>
+      <input 
+        type="checkbox" 
+        v-model="votoIngles" 
+        name="voto_ingles"
+        true-value=1
+        false-value=0
+        >
+      <label for="ingles">Inglês</label>
+      <br></br> 
+      <input type="submit" value="Enviar" onclick="addpalavra.inserirpalavras()">
+      <section v-if="errored">
+        <p>Carga de palavras falhou.</p>
+      </section>
+      <section v-else>
+        <div v-if="loading">Carregando...</div>
+        <div v-else>
+          <h2>Palavras já inseridas: {{ palavras.length }}</h2>
+          <table>
+              <tr>
+                <th> Palavra </th>
+                <th> Inglês </th>
+                <th> Português </th>
+                <!-- <th> Apagar </th> --> 
+                <!-- Ainda vou implementar o botão de apagar palavra -->
+              </tr>
+              <tr v-for="palavra in palavras">
+                  <td> {{ palavra[0] }} </td>
+                  <td> {{ palavra[1] }} </td>
+                  <td> {{ palavra[2] }} </td>
+                  <!-- <td> 
+                    <input 
+                      type="submit" 
+                      value="Apagar" 
+                      v-on:click="apagarpalavra(palavra[0])"
+                    >
+                  </td> -->
+                </tr>
+          </table>
+        </div>
+      </section>
+    </div>
 </div>
 
 <script src="/frontend/static/ceiamin.js"></script>
+
+<script>
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
 
 </body>
 </html>

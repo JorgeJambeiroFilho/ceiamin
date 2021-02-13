@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from br.gov.rfb.ceia.ceiamin.backend.minceia import wordInitialLoad
 from br.gov.rfb.ceia.ceiamin.backend.palavras import Palavras
-from br.gov.rfb.ceia.ceiamin.backend.lerpalavras import lerPalavrasMDB, inserirPalavraMDB, apagarPalavraMDB
+from br.gov.rfb.ceia.ceiamin.backend.lerpalavras import lerPalavrasMDB, inserirPalavraMDB, apagarPalavraMDB, votarPalavraMDB
 from fastapi.middleware.cors import CORSMiddleware
 import traceback
 
@@ -77,3 +77,18 @@ async def apagar_palavra(vocabulo: str):
     except Exception as e:
         traceback.print_exc()
         return {"Apagar palavra": "Falhou"}
+
+@app.post("/backend/votarpalavra")
+async def votar_palavra(vocabulo: Vocabulo):
+    try:
+        for cadapalavra in range(len(vocabulo.palavras_unicas)): 
+            retorno = await votarPalavraMDB(
+                vocabulo.palavras_unicas[cadapalavra], 
+                vocabulo.voto_ingles, 
+                vocabulo.voto_portugues
+                )
+        print (retorno)
+        return retorno
+    except Exception as e:
+        traceback.print_exc()
+        return {"Votar palavra": "Falhou"}
