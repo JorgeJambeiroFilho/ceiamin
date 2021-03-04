@@ -87,122 +87,116 @@
 
 
 <body>
-
 <input type="hidden"  id="backend_url_prefix" value="{backprefix}">
       
-<div id="adicionapalavras">
+<div id="usapalavras">
+  <h1>CEIAmin - Classificação de palavras em Inglês e Português</h1>   
   
-  <h1>CEIAmin - Classificação de palavras em Inglês e Português</h1>
-    
-  
-    <div class="tab">
-      <button class="tablinks" onclick="openCity(event, 'Classificar')" id="defaultOpen">Classificar palavras</button>
-      <button class="tablinks" onclick="openCity(event, 'Inserir')">Inserir novas palavras</button>
+  <div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'Classificar')">Classificar palavras</button>
+    <button class="tablinks" onclick="openCity(event, 'Inserir')" id="defaultOpen">Inserir novas palavras</button>
+  </div>
+
+  <div id="Classificar" class="tabcontent">
+    <h2>Classificação de Palavras</h2>
+    <h3>Palavras a classificar: {{ palavrasaVotar.length }}</h3>    
+    <p>As palavras estão em ordem decrescente de conhecimento por parte da IA. Indique a quais idiomas as palavras pertencem e clique em Enviar.</p>
+    <table>
+        <tr>
+          <th> Palavra</th>
+          <th> Percentual de conhecimento</th>
+          <th> Quantidade de votos</th>
+          <th> A qual idioma essa palavra pertence</th>
+        </tr>
+        <tr v-for="palavraaVotar in palavrasaVotar">
+            <td> {{ palavraaVotar.vocabulo }} </td>
+            <td> {{ palavraaVotar.conhecimento }} </td>
+            <td> {{ palavraaVotar.votos }} </td>
+            <td> 
+              <input 
+              type="checkbox"
+              value="votarIngles" 
+              true-value=1
+              false-value=0>
+              Inglês 
+              <input 
+              type="checkbox"
+              value="votarPortugues"
+              true-value=1
+              false-value=0>
+              Português 
+            </td>
+        </tr>
+    </table>
+    <br></br>
+    <input type="submit" value="Enviar" v-on:click="votarpalavras()">
+  </div>
+
+  <div id="Inserir" class="tabcontent">
+    <h2>Inserção de Novas Palavras</h2>
+    <textarea 
+      v-model="novasPalavras" 
+      placeholder="Adicione palavras" 
+      name="palavras_unicas"
+      rows = "16" 
+      cols = "100" 
+      required></textarea>
+    <br>
+    <div v-if="palavrasUnicas.length > 0">Quantidade de palavras a adicionar: {{ palavrasUnicas.length }}
+      <p>{{ palavrasUnicas }}</p>
     </div>
-
-
-    <!-- Tab content -->
-    <div id="Classificar" class="tabcontent">
-      <h2>Classificação de Palavras</h2>
-        <h3>Palavras a classificar: {{ palavrasaVotar.length }}</h3>    
-        <p>As palavras estão em ordem decrescente de conhecimento por parte da IA. Indique a quais idiomas as palavras pertencem e clique em Enviar.</p>
+    <p></p>
+    <input 
+      type="checkbox"
+      v-model="votoPortugues" 
+      name="voto_portugues" 
+      true-value=1
+      false-value=0
+      >
+    <label for="portugues">Português</label>
+    <input 
+      type="checkbox" 
+      v-model="votoIngles" 
+      name="voto_ingles"
+      true-value=1
+      false-value=0
+      >
+    <label for="ingles">Inglês</label>
+    <br></br> 
+    <input type="submit" value="Enviar" v-on:click="inserirpalavras()">
+    <section v-if="errored">
+      <p>Carga de palavras falhou.</p>
+    </section>
+    <section v-else>
+      <div v-if="loading">Carregando...</div>
+      <div v-else>
+        <h2>Palavras já inseridas: {{ palavras.length }}</h2>
         <table>
             <tr>
-              <th> Palavra</th>
-              <th> Percentual de conhecimento</th>
-              <th> Quantidade de votos</th>
-              <th> A qual idioma essa palavra pertence</th>
+              <th> Palavra </th>
+              <th> Inglês </th>
+              <th> Português </th>
+              <th> Apagar </th> 
             </tr>
-            <tr v-for="palavraaVotar in palavrasaVotar">
-                <td> {{ palavraaVotar.vocabulo }} </td>
-                <td> {{ palavraaVotar.conhecimento }} </td>
-                <td> {{ palavraaVotar.votos }} </td>
-                <td> 
-                  <input 
-                  type="checkbox"
-                  value="votarIngles" 
-                  true-value=1
-                  false-value=0>
-                  Inglês 
-                  <input 
-                  type="checkbox"
-                  value="votarPortugues"
-                  true-value=1
-                  false-value=0>
-                  Português 
-                </td>
+            <tr v-for="palavra in palavras" :key="palavra[0]">
+              <td> {{ palavra[0] }} </td>
+              <td> {{ palavra[1] }} </td>
+              <td> {{ palavra[2] }} </td>
+              <td> 
+                <input 
+                  type="submit" 
+                  value="Apagar" 
+                  v-on:click="apagarpalavra(palavra[0])"
+                >
+              </td>
             </tr>
         </table>
-        <br></br>
-        <!-- <input type="submit" value="Enviar" onclick="addpalavra.votarpalavras(palavrasaVotar)"> -->
-        <input type="submit" value="Enviar">
       </div>
-    </div>
+    </section>
+  </div>
 
+  
 
-    <!-- Tab content -->
-    <div id="Inserir" class="tabcontent">
-      <h2>Inserção de Novas Palavras</h2>
-      <textarea 
-        v-model="novasPalavras" 
-        placeholder="Adicione palavras" 
-        name="palavras_unicas"
-        rows = "16" 
-        cols = "100" 
-        required></textarea>
-      <br>
-      <span v-if="palavrasUnicas">Quantidade de palavras a adicionar: {{ palavrasUnicas.length }}</span>
-      <p>{{ palavrasUnicas }}</p>
-      <p></p>
-      <input 
-        type="checkbox"
-        v-model="votoPortugues" 
-        name="voto_portugues" 
-        true-value=1
-        false-value=0
-        >
-      <label for="portugues">Português</label>
-      <input 
-        type="checkbox" 
-        v-model="votoIngles" 
-        name="voto_ingles"
-        true-value=1
-        false-value=0
-        >
-      <label for="ingles">Inglês</label>
-      <br></br> 
-      <input type="submit" value="Enviar" onclick="addpalavra.inserirpalavras()">
-      <section v-if="errored">
-        <p>Carga de palavras falhou.</p>
-      </section>
-      <section v-else>
-        <div v-if="loading">Carregando...</div>
-        <div v-else>
-          <h2>Palavras já inseridas: {{ palavras.length }}</h2>
-          <table>
-              <tr>
-                <th> Palavra </th>
-                <th> Inglês </th>
-                <th> Português </th>
-                <!-- <th> Apagar </th> --> 
-                <!-- Ainda vou implementar o botão de apagar palavra -->
-              </tr>
-              <tr v-for="palavra in palavras">
-                  <td> {{ palavra[0] }} </td>
-                  <td> {{ palavra[1] }} </td>
-                  <td> {{ palavra[2] }} </td>
-                  <!-- <td> 
-                    <input 
-                      type="submit" 
-                      value="Apagar" 
-                      v-on:click="apagarpalavra(palavra[0])"
-                    >
-                  </td> -->
-                </tr>
-          </table>
-        </div>
-      </section>
-    </div>
 </div>
 
 <script src="/frontend/static/ceiamin.js"></script>

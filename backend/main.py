@@ -14,9 +14,11 @@ app = FastAPI()
 
 class Vocabulo(BaseModel):
     palavras_unicas: List[str]
-    voto_ingles: int 
-    voto_portugues: int
+    voto_ingles: Optional[int] = 0
+    voto_portugues: Optional[int] = 0
 
+class Palavra(BaseModel):
+    deletepalavra: str
 
 app.add_middleware(
     CORSMiddleware,
@@ -71,9 +73,9 @@ async def inserir_palavra(vocabulo: Vocabulo):
         return {"Inserir palavra": "Falhou"}
 
 @app.post("/backend/apagarpalavra")
-async def apagar_palavra(vocabulo: str):
+async def apagar_palavra(palavra: Palavra):
     try:
-        apagarPalavraMDB(vocabulo)       
+        retorno = await apagarPalavraMDB(palavra.deletepalavra)       
     except Exception as e:
         traceback.print_exc()
         return {"Apagar palavra": "Falhou"}

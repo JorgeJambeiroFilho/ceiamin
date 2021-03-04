@@ -7,9 +7,9 @@ OAUTH2_USERINFO_URL = "https://127.0.0.1/auth/realms/playipintern/protocol/openi
 [testing]
 TEST = 1
 #use o ip locaql de minha máquina, porque ele é acessível tanto de dentro quanto de fora da rede Docker
-OAUTH2_AUTHORIZATION_URL = "https://192.168.12.43/auth/realms/ceiamin/protocol/openid-connect/auth"
-OAUTH2_TOKEN_URL = "https://192.168.12.43/auth/realms/ceiamin/protocol/openid-connect/token"
-OAUTH2_USERINFO_URL = "https://192.168.12.43/auth/realms/ceiamin/protocol/openid-connect/userinfo"
+OAUTH2_AUTHORIZATION_URL = "https://192.168.15.19/auth/realms/ceiamin/protocol/openid-connect/auth"
+OAUTH2_TOKEN_URL = "https://192.168.15.19/auth/realms/ceiamin/protocol/openid-connect/token"
+OAUTH2_USERINFO_URL = "https://192.168.15.19/auth/realms/ceiamin/protocol/openid-connect/userinfo"
 
 
 [production]

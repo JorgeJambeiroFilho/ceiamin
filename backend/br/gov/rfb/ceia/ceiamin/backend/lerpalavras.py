@@ -7,7 +7,7 @@ async def lerPalavrasMDB():
     palavras = []
     async for document in collection.find():
         palavra = [
-            document["vocabulo"],
+            document["_id"],
             document.get("votoIngles",0),
             document.get("votoPortugues",0)
         ] 
@@ -19,11 +19,10 @@ async def inserirPalavraMDB(Palavra, votoI, votoP):
     mdb = getBotMongoDB()
     collection = mdb.palavras
     await collection.insert_one({
-        "vocabulo": Palavra,
+        "_id": Palavra,
         "votoIngles": votoI,
         "votoPortugues": votoP
     })   
-    # await collection.create_index([("vocabulo")])
     retorno = ({ 
         "Inserir palavra MDB": "ok" , 
         "Palavra": Palavra, 
@@ -33,14 +32,15 @@ async def inserirPalavraMDB(Palavra, votoI, votoP):
     print (retorno)
     return retorno
 
+
 async def votarPalavraMDB(Palavra, votoI, votoP):
     mdb = getBotMongoDB()
     collection = mdb.palavras
-    votarpalavra = await collection.find_one({"vocabulo": Palavra})
+    votarpalavra = await collection.find_one({"_id": Palavra})
     oldIngles = votarpalavra["votoIngles"]
     oldPortugues = votarpalavra["votoPortugues"]
     await collection.update_one(
-        {"vocabulo": Palavra},
+        {"_id": Palavra},
         {'$set': {
             {"votoIngles": oldIngles + votoI},
             {"votoPortugues": oldPortugues + votoP}
@@ -57,10 +57,11 @@ async def votarPalavraMDB(Palavra, votoI, votoP):
     print (retorno)
     return retorno
 
+
 async def apagarPalavraMDB(vocabulo):
     mdb = getBotMongoDB()
     collection = mdb.palavras
-    await collection.delete_one({ "vocabulo": vocabulo })   
+    await collection.delete_many({ "_id": vocabulo })   
     retorno = ({ 
         "Apagar palavra MDB": "ok" , 
         "Palavra": vocabulo

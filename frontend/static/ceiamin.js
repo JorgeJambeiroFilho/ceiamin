@@ -4,8 +4,8 @@ backend = ""
 var backend = document.getElementById("backend_url_prefix").value;
 
 
-addpalavra = new Vue({
-  el: '#adicionapalavras',
+app = new Vue({
+  el: '#usapalavras',
   data () {
     return {
       palavras: null,
@@ -23,13 +23,30 @@ addpalavra = new Vue({
         },
         {
           vocabulo: "chocolate",
-          conhecimento:  "0.52490823",
+          conhecimento:  "0.54321",
           votos: "4"
         },
         {
           vocabulo: "incredible",
           conhecimento:  "0.78535023",
           votos: "8"
+        }
+      ],
+      palavrasVotadas: [ 
+        {
+          vocabulo: "banana",
+          votoI: "2",
+          votoP: "2"
+        },
+        {
+          vocabulo: "chocolate",
+          votoI: "2",
+          votoP: "2"
+        },
+        {
+          vocabulo: "incredible",
+          votoI: "2",
+          votoP: "2"
         }
       ]
     }
@@ -38,7 +55,7 @@ addpalavra = new Vue({
     axios
       .get(backend+'/backend/lerpalavras')
       .then(response => {
-        this.palavras = response.data.palavras
+        this.palavras = response.data.palavras.sort()
       })
       .catch(error => {
         console.log(error)
@@ -48,7 +65,20 @@ addpalavra = new Vue({
     },
   computed: {
     palavrasUnicas: function () {
-      palavrasUnicas = this.novasPalavras.replace().toLowerCase().split(' ').sort()
+      palavrasUnicas = this.novasPalavras.toLowerCase().replace(/\n/gi,' ').replace(/([^a-zà-ü]|-\s)/gi,' ').split(' ').sort()
+      
+      // Will remove all falsy values: undefined, null, 0, false, NaN and "" (empty string)
+      function cleanArray(actual) {
+        var newArray = new Array();
+        for (var i = 0; i < actual.length; i++) {
+          if (actual[i]) {
+            newArray.push(actual[i]);
+          }
+        }
+        return newArray;
+      }
+
+      palavrasUnicas = cleanArray(palavrasUnicas);
       excluiRepetidas = [...new Set(palavrasUnicas)]
       return excluiRepetidas
     }
@@ -65,15 +95,17 @@ addpalavra = new Vue({
       })
       .catch(console.error)
     },
-    apagarpalavra(palavra) {
-      axios.post("/backend/apagarpalavra", palavra)
+    apagarpalavra: function(alvo) {
+      axios.post("/backend/apagarpalavra", {
+        deletepalavra: alvo
+      })
       .then(response => {
         window.location.reload();
       })
       .catch(console.error)
     },
-    votarpalavra(palavrasVotadas) {
-      axios.post("/backend/votarpalavra", palavrasVotadas)
+    votarpalavras() {
+      axios.post("/backend/votarpalavra", this.palavrasVotadas)
       .then(response => {
         window.location.reload();
       })
