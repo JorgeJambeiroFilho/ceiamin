@@ -20,6 +20,11 @@ class Vocabulo(BaseModel):
 class Palavra(BaseModel):
     deletepalavra: str
 
+class Voto(BaseModel):
+    vocabulo: str
+    voto_ingles: Optional[int] = 0
+    voto_portugues: Optional[int] = 0
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -65,9 +70,6 @@ async def inserir_palavra(vocabulo: Vocabulo):
                 vocabulo.voto_ingles, 
                 vocabulo.voto_portugues
                 )
-        print (retorno)
-        # alert("Palavras inseridas")
-        return retorno
     except Exception as e:
         traceback.print_exc()
         return {"Inserir palavra": "Falhou"}
@@ -81,14 +83,13 @@ async def apagar_palavra(palavra: Palavra):
         return {"Apagar palavra": "Falhou"}
 
 @app.post("/backend/votarpalavra")
-async def votar_palavra(vocabulo: Vocabulo):
+async def votar_palavra(votando: Voto):
     try:
-        for cadapalavra in range(len(vocabulo.palavras_unicas)): 
-            retorno = await votarPalavraMDB(
-                vocabulo.palavras_unicas[cadapalavra], 
-                vocabulo.voto_ingles, 
-                vocabulo.voto_portugues
-                )
+        retorno = await votarPalavraMDB(
+            votando.vocabulo, 
+            votando.voto_ingles, 
+            votando.voto_portugues
+            )
         print (retorno)
         return retorno
     except Exception as e:
