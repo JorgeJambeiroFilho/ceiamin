@@ -15,54 +15,22 @@ app = new Vue({
       novasPalavras: "",
       votoPortugues: parseInt(0),
       votoIngles: parseInt(0),
-      palavrasaVotar: [ 
-        {
-          vocabulo: "banana",
-          conhecimento:  "0.987654321",
-          votos: "2"
-        },
-        {
-          vocabulo: "chocolate",
-          conhecimento:  "0.54321",
-          votos: "4"
-        },
-        {
-          vocabulo: "incredible",
-          conhecimento:  "0.78535023",
-          votos: "8"
-        }
-      ],
-      palavrasVotadas: [ 
-        {
-          vocabulo: "banana",
-          votoI: "2",
-          votoP: "2"
-        },
-        {
-          vocabulo: "chocolate",
-          votoI: "2",
-          votoP: "2"
-        },
-        {
-          vocabulo: "incredible",
-          votoI: "2",
-          votoP: "2"
-        }
-      ]
+      palavrasaVotar: []
     }
   },
   mounted () {
     axios
       .get(backend+'/backend/lerpalavras')
       .then(response => {
-        this.palavras = response.data.palavras.sort()
+        this.palavras = response.data.palavras.sort();
+        this.listaaVotar()
       })
       .catch(error => {
         console.log(error)
         this.errored = true
       })
-      .finally(() => this.loading = false)
-    },
+      .finally(() => this.loading = false)  
+  },
   computed: {
     palavrasUnicas: function () {
       palavrasUnicas = this.novasPalavras.toLowerCase().replace(/\n/gi,' ').replace(/([^a-zà-ü]|-\s)/gi,' ').split(' ').sort()
@@ -105,11 +73,22 @@ app = new Vue({
       .catch(console.error)
     },
     votarpalavras() {
-      axios.post("/backend/votarpalavra", this.palavrasVotadas)
-      .then(response => {
-        window.location.reload();
-      })
-      .catch(console.error)
+      for (var i=0; i < this.palavrasaVotar.length; i++) {
+        axios.post("/backend/votarpalavra", this.palavrasaVotar[i])
+        .then(response => {
+          window.location.reload();
+        })
+        .catch(console.error)              
+      }
+    },
+    listaaVotar: function () {
+      for (var i=0; i < this.palavras.length; i++) {
+        this.palavrasaVotar.push({
+          "vocabulo" : this.palavras[i][0],
+          "votos" : this.palavras[i][1]+this.palavras[i][2],
+          "conhecimento" : Math.max(this.palavras[i][3],this.palavras[i][4])          
+        })
+      }      
     }
   }
 })

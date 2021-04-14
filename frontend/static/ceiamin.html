@@ -88,13 +88,14 @@
 
 <body>
 <input type="hidden"  id="backend_url_prefix" value="{backprefix}">
-      
+
 <div id="usapalavras">
   <h1>CEIAmin - Classificação de palavras em Inglês e Português</h1>   
   
   <div class="tab">
     <button class="tablinks" onclick="openCity(event, 'Classificar')">Classificar palavras</button>
     <button class="tablinks" onclick="openCity(event, 'Inserir')" id="defaultOpen">Inserir novas palavras</button>
+    <button class="tablinks" onclick="openCity(event, 'Treinar')">Treinar a IA</button>
   </div>
 
   <div id="Classificar" class="tabcontent">
@@ -104,26 +105,28 @@
     <table>
         <tr>
           <th> Palavra</th>
-          <th> Percentual de conhecimento</th>
           <th> Quantidade de votos</th>
+          <th> Percentual de conhecimento</th>
           <th> A qual idioma essa palavra pertence</th>
         </tr>
         <tr v-for="palavraaVotar in palavrasaVotar">
             <td> {{ palavraaVotar.vocabulo }} </td>
-            <td> {{ palavraaVotar.conhecimento }} </td>
             <td> {{ palavraaVotar.votos }} </td>
+            <td> {{ palavraaVotar.conhecimento }} </td>
             <td> 
               <input 
               type="checkbox"
               value="votarIngles" 
               true-value=1
-              false-value=0>
+              false-value=0
+              v-model="palavraaVotar.voto_ingles">
               Inglês 
               <input 
               type="checkbox"
               value="votarPortugues"
               true-value=1
-              false-value=0>
+              false-value=0
+              v-model="palavraaVotar.voto_portugues">
               Português 
             </td>
         </tr>
@@ -195,7 +198,12 @@
     </section>
   </div>
 
-  
+  <div id="Treinar" class="tabcontent">
+    <h2>Treinar a IA</h2>
+    <p>Aciona o treinamento da Inteligência Artificial.</p>
+    <br></br>
+    <!-- <input type="submit" value="Enviar" v-on:click="treinarIA()"> -->
+  </div>
 
 </div>
 

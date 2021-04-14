@@ -5,23 +5,7 @@ import os
 class Palavras:
     def __init__(self, palavra):
         self.palavras = palavra
-        # self.palavras = []
-        # self.palavras.append(palavra)
-
-
-# class Palavras:
-#     def __init__(self):
-#         mdb = getBotMongoDB()
-#         collection = mdb.palavras
-#         self.palavras = []
-#         for document in collection.find():
-#             palavra = [
-#                 document["vocabulo"],
-#                 document.get("votoIngles",0),
-#                 document.get("votoPortugues",0)
-#             ] 
-#         self.palavras.append(palavra)
-        
+      
 
 class initialPalavras:
     def __init__(self):
