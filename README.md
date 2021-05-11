@@ -18,6 +18,8 @@ Uso:
       cd ceiamin
   para entrar no repositorio
   
+  Para rodar localmente, edite o arquivo frontend/settings.toml e substitua o IP pelo seu IP local nas linhas de [testing]
+  
   Execute o script 
   
       setup.sh    
