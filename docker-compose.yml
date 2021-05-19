@@ -17,6 +17,21 @@ services:
       ENV_FOR_DYNACONF: "testing"
       PYTHONUNBUFFERED: 1  # para os prints aparecerem logo
 
+  ceiamin_ia:
+      container_name: c_rfb_ceiamin_ia
+      hostname: ceiamin_ia
+      #image: jesjf/jjprivate:playip_app_aiohttp
+      image: rfb_ceiamin_ia
+      ports:
+        - "8003:80"
+      restart: unless-stopped  # o serviço fica no ar, mesmo que a máquina host seja reiniciada. só para por comando explícito
+      build:
+          context: ./ia
+          dockerfile: Dockerfile
+      environment:
+        ENV_FOR_DYNACONF: "testing"
+        PYTHONUNBUFFERED: 1  # para os prints aparecerem logo
+
   ceiamin_frontend:
     container_name: c_rfb_ceiamin_frontend
     hostname: ceiamin_frontend
@@ -94,5 +109,3 @@ services:
     restart: unless-stopped
     #depends_on:
     #  - mysql
-
-
