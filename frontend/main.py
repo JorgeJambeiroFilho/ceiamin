@@ -63,7 +63,7 @@ def get_oauth2_login_url_intern(request: Request):
     nonce = 456
     cid = "ceiamin"
 
-    callback = protocol + "://" + host + "/frontend/oauth2Callback/"
+    callback = protocol + "://" + host + "/frontend/oauth2Callback"
 
     url = "{burl}?client_id={cid}&response_type=code&state={state}&nonce={nonce}&redirect_uri={callback}"\
           .format(burl=settings.OAUTH2_AUTHORIZATION_URL, nonce=nonce, state=state, cid=cid, callback=callback)

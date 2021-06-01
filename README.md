@@ -123,11 +123,11 @@ Temos:
         
       Clique em "save" na parete de baixo da página.
       
-      De novo na coluna esqueda, clique em "users". Adicione um usuário para você. Escolha o nome que quiser e ponha no campo "user name".
+      De novo na coluna esquerda, clique em "users". Adicione um usuário para você. Escolha o nome que quiser e ponha no campo "user name".
       
       Clique em save.
       
-      Acesse o ceiamion via 
+      Acesse o ceiamin via 
       
         https://127.0.0.1/frontend      
       
